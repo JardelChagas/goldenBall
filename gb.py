@@ -269,7 +269,7 @@ tipo = ['packing', 'separated']
 if __name__ == "__main__":
     for t in tipo:
         for f in files:
-            file = open(f"instancias/{t}/{f}.txt").read().strip().split('\n')
+            file = open(f'instancias/separated/instance_01_2pol.txt').read().strip().split('\n')
             edges = []
             if file:
                 n = int(file.pop(0))
@@ -285,7 +285,7 @@ if __name__ == "__main__":
                 creator.Individual,
                 toolbox.indices
             )
-            # plotar(individuo, 'iteracao')
+            
             # exit(0)
             # Generate Population
             toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -307,6 +307,65 @@ if __name__ == "__main__":
             with timeit(file_write=file_write):
                 iteracao = main(file=file_write)
             individuoFinal = decode(iteracao[2][0])
+            plotar(individuoFinal, 'iteracao')
             individuoFinal2 = [[edges[i] for i in individuoFinal[0]], individuoFinal[1]]
             print("Individuo:", [[edges[i] for i in individuoFinal[0]], individuoFinal[1]], file=file_write)
             print("Fitness: ", iteracao[2][0].fitness.values[0], file=file_write)
+
+
+'''
+
+def training_2_opt(instace, teams, sizePayer):
+    
+    for team in teams:
+        for player in team:
+            continuar = True
+            gene1 = None
+            gene2 = None
+            x = 1
+                      
+            if(isinstance(player, list)):
+                playerL = np.random.choice(a=[False], size=sizePayer)
+                while(continuar):
+                    continuar=False
+                    for i in range(sizePayer):
+                        if(i < sizePayer - x):
+                            if(not contem_ponto_em_comum(instace[player[9 + i] - 1], instace[player[10 + i] - 1]) ):
+                                if(gene1 == None and not playerL[player[9+i]-1]):
+                                    gene1 = player.pop(9 + i)
+                                    x = x + 1
+                                    i = i -1
+                                elif(gene2 == None and not playerL[player[9+i]-1]):
+                                    gene2 = player.pop(9 + i)
+                                    continuar = True
+                                    x = x + 1
+                                    colocar_aresta(instace, player, gene1, gene2, len(player))
+                                    playerL[ gene1 - 1] = True
+                                    playerL[ gene2 - 1] = True
+                                    gene1 = None 
+                                    gene2 = None
+                print(continuar)
+                        
+    
+def remover_aresta():
+    return ''
+
+def colocar_aresta(instace, player, gene1, gene2, sizePayer):
+    
+    for i in range(int((sizePayer / 2) + 1)):
+        pontocomum = False
+        if(i < sizePayer - 1):
+            if(gene1 != None and contem_ponto_em_comum(instace[player[9 + i] - 1], instace[gene1 - 1])):
+                player.insert(9 + i, gene1)
+                gene1 = None
+            elif(gene2 != None and contem_ponto_em_comum(instace[player[9 + i] - 1], instace[gene2 - 1])):
+                player.insert(9 + i, gene2)
+                gene2 = None
+            
+            if(gene2 == None and gene1 == None):
+                pontocomum = True
+                break
+    if(not pontocomum):
+        print("movimenta para o ponto mais próximo")
+
+'''

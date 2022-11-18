@@ -1,0 +1,48 @@
+import copy
+
+def contem_ponto_em_comum(arestaA, arestaB):
+    pontosA = arestaA.split(" ")
+    pontosB = arestaB.split(" ")
+
+    pontoA = pontosA[0] + pontosA[1]
+    pontoB = pontosA[2] + pontosA[3]
+    pontoC = pontosB[0] + pontosB[1]
+    pontoD = pontosB[2] + pontosB[3]
+
+    if(pontoA == pontoC or pontoA == pontoD):
+        return True
+    elif(pontoB == pontoC or pontoB == pontoD):
+        return True
+    return False
+
+def score_relax(instace, player):
+    pontos_em_commum = 0
+    for i in range(len(player[2]) - 1) :
+        if(contem_ponto_em_comum(instace[player[2][i] - 1], instace[player[2][i + 1] - 1])):
+            pontos_em_commum += 1
+    return pontos_em_commum
+
+if __name__ == '__main__':
+    instace = []
+    sizePayer = 0
+    with open("instancias/separated/instance_01_2pol.txt","r") as file:
+        sizePlay = int(file.readline(1))
+        for line in file:
+            if(line != '\n'):
+                if(line[-1:] == '\n'):
+                    instace.append(line[:-1])
+
+    while(continuar):
+        continuar = False
+        for i in range(sizePayer-1):
+            if( not contem_ponto_em_comum(instace[player[2][i] - 1], instace[player[2][i + 1] - 1]) ):
+                player_copy = copy.deepcopy(player)
+                gene = player_copy[2].pop(i + 1)
+                player_copy[2].insert(i, gene)
+                s1 = score_relax(instace, player_copy)
+                s2 = score_relax(instace, player)
+                            
+                if( s1 > s2 ):
+                    player = player_copy
+                                #colocar_aresta(instace, player, gene1, gene2, i)
+                    continuar = True
